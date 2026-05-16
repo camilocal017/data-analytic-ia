@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #060606;
+  color: #fff;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { background-position: -600px 0; }
+  to   { background-position: 600px 0; }
+}
+
+.fade-up    { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+.fade-up-d1 { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) 0.07s both; }
+.fade-up-d2 { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) 0.14s both; }
+.fade-up-d3 { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) 0.21s both; }
+
+.skeleton {
+  background: linear-gradient(90deg, #161616 25%, #1e1e1e 50%, #161616 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 8px;
+}
