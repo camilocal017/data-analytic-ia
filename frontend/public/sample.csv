@@ -1,0 +1,98 @@
+Fecha,Producto,Categoria,Region,Vendedor,Ventas,Unidades,Costo
+2024-01-05,Laptop Pro 15,Electrónica,Norte,Ana García,2499000,3,1800000
+2024-01-08,Auriculares BT,Accesorios,Sur,Carlos López,189000,12,95000
+2024-01-10,Monitor 4K,Electrónica,Centro,María Torres,890000,5,560000
+2024-01-12,Teclado Mecánico,Accesorios,Norte,Ana García,245000,8,120000
+2024-01-15,Laptop Pro 15,Electrónica,Este,Juan Pérez,2499000,2,1800000
+2024-01-18,Mouse Inalámbrico,Accesorios,Sur,Carlos López,89000,20,35000
+2024-01-20,Tablet 10",Electrónica,Norte,Ana García,650000,4,410000
+2024-01-22,Webcam HD,Accesorios,Centro,María Torres,175000,9,85000
+2024-01-25,Laptop Air,Electrónica,Sur,Carlos López,1890000,3,1350000
+2024-01-28,Auriculares BT,Accesorios,Este,Juan Pérez,189000,15,95000
+2024-02-02,Monitor 4K,Electrónica,Norte,Ana García,890000,6,560000
+2024-02-05,Laptop Pro 15,Electrónica,Centro,María Torres,2499000,4,1800000
+2024-02-08,Teclado Mecánico,Accesorios,Sur,Carlos López,245000,11,120000
+2024-02-12,Mouse Inalámbrico,Accesorios,Norte,Ana García,89000,25,35000
+2024-02-15,Tablet 10",Electrónica,Este,Juan Pérez,650000,5,410000
+2024-02-18,Laptop Air,Electrónica,Norte,Ana García,1890000,4,1350000
+2024-02-20,Webcam HD,Accesorios,Sur,Carlos López,175000,12,85000
+2024-02-22,Monitor 4K,Electrónica,Centro,María Torres,890000,3,560000
+2024-02-25,Auriculares BT,Accesorios,Este,Juan Pérez,189000,18,95000
+2024-02-28,Laptop Pro 15,Electrónica,Norte,Ana García,2499000,2,1800000
+2024-03-03,Mouse Inalámbrico,Accesorios,Sur,Carlos López,89000,30,35000
+2024-03-06,Tablet 10",Electrónica,Centro,María Torres,650000,6,410000
+2024-03-10,Teclado Mecánico,Accesorios,Norte,Ana García,245000,14,120000
+2024-03-14,Laptop Air,Electrónica,Este,Juan Pérez,1890000,5,1350000
+2024-03-18,Monitor 4K,Electrónica,Sur,Carlos López,890000,7,560000
+2024-03-22,Webcam HD,Accesorios,Norte,Ana García,175000,10,85000
+2024-03-26,Laptop Pro 15,Electrónica,Centro,María Torres,2499000,3,1800000
+2024-03-30,Auriculares BT,Accesorios,Sur,Carlos López,189000,22,95000
+2024-04-02,Mouse Inalámbrico,Accesorios,Norte,Ana García,89000,28,35000
+2024-04-05,Tablet 10",Electrónica,Este,Juan Pérez,650000,4,410000
+2024-04-08,Laptop Air,Electrónica,Norte,Ana García,1890000,6,1350000
+2024-04-12,Teclado Mecánico,Accesorios,Centro,María Torres,245000,16,120000
+2024-04-16,Monitor 4K,Electrónica,Sur,Carlos López,890000,5,560000
+2024-04-20,Laptop Pro 15,Electrónica,Norte,Ana García,2499000,4,1800000
+2024-04-24,Webcam HD,Accesorios,Este,Juan Pérez,175000,13,85000
+2024-04-28,Auriculares BT,Accesorios,Sur,Carlos López,189000,20,95000
+2024-05-02,Mouse Inalámbrico,Accesorios,Norte,Ana García,89000,35,35000
+2024-05-06,Laptop Air,Electrónica,Centro,María Torres,1890000,5,1350000
+2024-05-10,Tablet 10",Electrónica,Sur,Carlos López,650000,7,410000
+2024-05-14,Teclado Mecánico,Accesorios,Norte,Ana García,245000,19,120000
+2024-05-18,Monitor 4K,Electrónica,Este,Juan Pérez,890000,8,560000
+2024-05-22,Laptop Pro 15,Electrónica,Sur,Carlos López,2499000,3,1800000
+2024-05-26,Webcam HD,Accesorios,Centro,María Torres,175000,11,85000
+2024-05-30,Auriculares BT,Accesorios,Norte,Ana García,189000,24,95000
+2024-06-03,Mouse Inalámbrico,Accesorios,Sur,Carlos López,89000,40,35000
+2024-06-07,Laptop Air,Electrónica,Norte,Ana García,1890000,7,1350000
+2024-06-11,Tablet 10",Electrónica,Este,Juan Pérez,650000,5,410000
+2024-06-15,Teclado Mecánico,Accesorios,Centro,María Torres,245000,18,120000
+2024-06-19,Monitor 4K,Electrónica,Norte,Ana García,890000,9,560000
+2024-06-23,Laptop Pro 15,Electrónica,Sur,Carlos López,2499000,5,1800000
+2024-06-27,Webcam HD,Accesorios,Este,Juan Pérez,175000,14,85000
+2024-07-01,Auriculares BT,Accesorios,Norte,Ana García,189000,26,95000
+2024-07-05,Mouse Inalámbrico,Accesorios,Sur,Carlos López,89000,38,35000
+2024-07-09,Laptop Air,Electrónica,Centro,María Torres,1890000,6,1350000
+2024-07-13,Tablet 10",Electrónica,Norte,Ana García,650000,8,410000
+2024-07-17,Teclado Mecánico,Accesorios,Este,Juan Pérez,245000,21,120000
+2024-07-21,Monitor 4K,Electrónica,Sur,Carlos López,890000,7,560000
+2024-07-25,Laptop Pro 15,Electrónica,Norte,Ana García,2499000,6,1800000
+2024-07-29,Webcam HD,Accesorios,Centro,María Torres,175000,16,85000
+2024-08-02,Auriculares BT,Accesorios,Sur,Carlos López,189000,29,95000
+2024-08-06,Mouse Inalámbrico,Accesorios,Norte,Ana García,89000,42,35000
+2024-08-10,Laptop Air,Electrónica,Este,Juan Pérez,1890000,8,1350000
+2024-08-14,Tablet 10",Electrónica,Sur,Carlos López,650000,6,410000
+2024-08-18,Teclado Mecánico,Accesorios,Centro,María Torres,245000,23,120000
+2024-08-22,Monitor 4K,Electrónica,Norte,Ana García,890000,10,560000
+2024-08-26,Laptop Pro 15,Electrónica,Sur,Carlos López,2499000,4,1800000
+2024-08-30,Webcam HD,Accesorios,Este,Juan Pérez,175000,15,85000
+2024-09-03,Auriculares BT,Accesorios,Norte,Ana García,189000,31,95000
+2024-09-07,Mouse Inalámbrico,Accesorios,Centro,María Torres,89000,45,35000
+2024-09-11,Laptop Air,Electrónica,Sur,Carlos López,1890000,9,1350000
+2024-09-15,Tablet 10",Electrónica,Norte,Ana García,650000,7,410000
+2024-09-19,Teclado Mecánico,Accesorios,Este,Juan Pérez,245000,25,120000
+2024-09-23,Monitor 4K,Electrónica,Sur,Carlos López,890000,8,560000
+2024-09-27,Laptop Pro 15,Electrónica,Centro,María Torres,2499000,7,1800000
+2024-10-01,Webcam HD,Accesorios,Norte,Ana García,175000,17,85000
+2024-10-05,Auriculares BT,Accesorios,Sur,Carlos López,189000,33,95000
+2024-10-09,Mouse Inalámbrico,Accesorios,Este,Juan Pérez,89000,48,35000
+2024-10-13,Laptop Air,Electrónica,Norte,Ana García,1890000,10,1350000
+2024-10-17,Tablet 10",Electrónica,Centro,María Torres,650000,9,410000
+2024-10-21,Teclado Mecánico,Accesorios,Sur,Carlos López,245000,27,120000
+2024-10-25,Monitor 4K,Electrónica,Norte,Ana García,890000,12,560000
+2024-10-29,Laptop Pro 15,Electrónica,Este,Juan Pérez,2499000,5,1800000
+2024-11-02,Webcam HD,Accesorios,Sur,Carlos López,175000,18,85000
+2024-11-06,Auriculares BT,Accesorios,Norte,Ana García,189000,35,95000
+2024-11-10,Mouse Inalámbrico,Accesorios,Centro,María Torres,89000,52,35000
+2024-11-14,Laptop Air,Electrónica,Este,Juan Pérez,1890000,11,1350000
+2024-11-18,Tablet 10",Electrónica,Norte,Ana García,650000,10,410000
+2024-11-22,Teclado Mecánico,Accesorios,Sur,Carlos López,245000,29,120000
+2024-11-26,Monitor 4K,Electrónica,Centro,María Torres,890000,13,560000
+2024-11-30,Laptop Pro 15,Electrónica,Norte,Ana García,2499000,8,1800000
+2024-12-04,Webcam HD,Accesorios,Este,Juan Pérez,175000,20,85000
+2024-12-08,Auriculares BT,Accesorios,Sur,Carlos López,189000,38,95000
+2024-12-12,Mouse Inalámbrico,Accesorios,Norte,Ana García,89000,55,35000
+2024-12-16,Laptop Air,Electrónica,Centro,María Torres,1890000,12,1350000
+2024-12-20,Tablet 10",Electrónica,Sur,Carlos López,650000,11,410000
+2024-12-24,Laptop Pro 15,Electrónica,Norte,Ana García,2499000,10,1800000
+2024-12-28,Monitor 4K,Electrónica,Este,Juan Pérez,890000,15,560000

@@ -171,6 +171,24 @@ export default function App() {
   const onFileChange = (e) => analyze(e.target.files[0]);
   const reset = () => { setResult(null); if (inputRef.current) inputRef.current.value = ""; };
 
+  const loadSample = async () => {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch("/sample.csv");
+      const blob = await res.blob();
+      const file = new File([blob], "ventas-2024.csv", { type: "text/csv" });
+      const form = new FormData();
+      form.append("file", file);
+      const { data } = await axios.post(`${API}/analyze`, form);
+      setResult(data);
+    } catch {
+      toast.error("Error cargando los datos de ejemplo");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: "#060606" }}>
       <Toaster position="top-right" toastOptions={{ style: { background: "#111", color: "#f1f5f9", border: "1px solid #222", borderRadius: 12, fontSize: 13, fontFamily: "Inter" } }} />
@@ -226,6 +244,16 @@ export default function App() {
                 ))}
               </div>
             </div>
+
+            <button
+              className="fade-up-d2"
+              onClick={loadSample}
+              style={{ marginTop: 20, background: "none", border: "none", cursor: "pointer", fontFamily: "Inter", fontSize: 12, color: "#374151", display: "flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 99, transition: "color 0.2s" }}
+              onMouseEnter={e => e.currentTarget.style.color = "#22c55e"}
+              onMouseLeave={e => e.currentTarget.style.color = "#374151"}
+            >
+              <Sparkles size={11} /> Probar con datos de ejemplo
+            </button>
           </div>
         )}
 
