@@ -6,7 +6,7 @@ Herramienta de análisis de datos CSV con inteligencia artificial. Sube cualquie
 
 ## Demo
 
-🔗 [dataanalytic-ia.vercel.app](https://dataanalytic-ia.vercel.app) *(próximamente)*
+🔗 [data-analytic-ia.vercel.app](https://data-analytic-ia.vercel.app)
 
 ## Stack
 
