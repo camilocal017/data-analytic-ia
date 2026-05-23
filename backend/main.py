@@ -241,22 +241,41 @@ def generate_local_insights(df: pd.DataFrame) -> str:
 
 
 def read_file(filename: str, content: bytes) -> pd.DataFrame:
-    """Lee CSV o Excel probando múltiples encodings automáticamente."""
+    """Lee CSV o Excel probando múltiples encodings y opciones de parsing."""
     name = filename.lower()
 
     # ── Excel ────────────────────────────────────────────────────────────────
     if name.endswith((".xlsx", ".xls")):
         return pd.read_excel(io.BytesIO(content))
 
-    # ── CSV: probar encodings en orden de probabilidad ────────────────────────
-    ENCODINGS = ["utf-8", "utf-8-sig", "latin-1", "cp1252", "utf-16", "iso-8859-1"]
+    # ── CSV: matriz de encodings × opciones de parsing ────────────────────────
+    ENCODINGS = ["utf-8-sig", "utf-8", "latin-1", "cp1252", "iso-8859-1", "utf-16"]
+
+    # Cada intento es un dict de kwargs extra para read_csv
+    PARSE_OPTS = [
+        {},                                                          # estándar
+        {"on_bad_lines": "skip"},                                    # saltea filas rotas
+        {"quoting": 3, "on_bad_lines": "skip"},                      # QUOTE_NONE
+        {"quoting": 3, "on_bad_lines": "skip", "escapechar": "\\"},  # QUOTE_NONE + escape
+    ]
+
     last_err: Exception | None = None
     for enc in ENCODINGS:
-        try:
-            return pd.read_csv(io.BytesIO(content), sep=None, engine="python", encoding=enc)
-        except Exception as e:
-            last_err = e
-    raise last_err  # type: ignore
+        for opts in PARSE_OPTS:
+            try:
+                df = pd.read_csv(
+                    io.BytesIO(content),
+                    sep=None,
+                    engine="python",
+                    encoding=enc,
+                    **opts,
+                )
+                if not df.empty:
+                    return df
+            except Exception as e:
+                last_err = e
+
+    raise last_err or ValueError("No se pudo parsear el archivo")
 
 
 @app.post("/analyze")
