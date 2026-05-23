@@ -259,7 +259,7 @@ def read_file(filename: str, content: bytes) -> pd.DataFrame:
         {"quoting": 3, "on_bad_lines": "skip", "escapechar": "\\"},  # QUOTE_NONE + escape
     ]
 
-    last_err: Exception | None = None
+    last_err = None
     for enc in ENCODINGS:
         for opts in PARSE_OPTS:
             try:
@@ -316,78 +316,90 @@ async def analyze(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Solo se aceptan archivos CSV o Excel (.xlsx)")
 
     content = await file.read()
+
     try:
+        # ── Leer y limpiar ────────────────────────────────────────────────────
         df = read_file(file.filename, content)
         df = clean_dataframe(df)
-    except Exception:
-        raise HTTPException(
-            status_code=400,
-            detail="No se pudo leer el archivo. Verifica que sea un CSV o Excel válido."
+
+        if df.empty:
+            raise HTTPException(status_code=400, detail="El archivo está vacío")
+
+        # ── Parsear fechas ────────────────────────────────────────────────────
+        df = parse_dates(df)
+
+        # ── Preview ───────────────────────────────────────────────────────────
+        preview = (
+            df.head(5)
+            .astype(str)
+            .replace({"NaT": None, "nan": None, "<NA>": None})
+            .to_dict("records")
         )
 
-    if df.empty:
-        raise HTTPException(status_code=400, detail="El CSV está vacío")
+        # ── Column info ───────────────────────────────────────────────────────
+        columns = []
+        for col in df.columns:
+            dtype = (
+                "date"
+                if pd.api.types.is_datetime64_any_dtype(df[col])
+                else detect_col_type(df[col])
+            )
+            columns.append({
+                "name":   col,
+                "type":   dtype,
+                "nulls":  int(df[col].isna().sum()),
+                "unique": int(df[col].nunique()),
+            })
 
-    # Parsear fechas
-    df = parse_dates(df)
+        # ── Stats numéricas ───────────────────────────────────────────────────
+        metric_cols = get_metric_cols(df)
+        stats = {}
+        if metric_cols:
+            desc = df[metric_cols].describe().replace({np.nan: None})
+            stats = desc.to_dict()
 
-    # Preview
-    preview = df.head(5).astype(str).replace("NaT", None).replace("nan", None).to_dict("records")
+        # ── Charts ────────────────────────────────────────────────────────────
+        charts = build_chart_data(df)
 
-    # Column info
-    columns = []
-    for col in df.columns:
-        dtype = detect_col_type(df[col]) if not pd.api.types.is_datetime64_any_dtype(df[col]) else "date"
-        columns.append({
-            "name": col,
-            "type": dtype,
-            "nulls": int(df[col].isna().sum()),
-            "unique": int(df[col].nunique()),
-        })
+        # ── AI insights ───────────────────────────────────────────────────────
+        summary = build_summary_for_ai(df)
+        prompt = (
+            "Eres un analista de datos senior. Basándote en este dataset, entrega:\n\n"
+            "**Resumen ejecutivo** (2-3 oraciones con los hallazgos más importantes)\n\n"
+            "**Insights clave:**\n"
+            "- [3-5 puntos accionables y concretos]\n\n"
+            "**Recomendación principal** (qué acción concreta se debería tomar)\n\n"
+            "Responde en español. Sé directo y específico con los números del dataset.\n\n"
+            f"{summary}"
+        )
 
-    # Stats numéricas
-    metric_cols = get_metric_cols(df)
-    stats = {}
-    if metric_cols:
-        desc = df[metric_cols].describe().replace({np.nan: None})
-        stats = desc.to_dict()
+        ai_insights = None
+        for model_name in ["gemini-2.0-flash-lite", "gemini-1.5-flash", "gemini-2.0-flash"]:
+            try:
+                response = client.models.generate_content(model=model_name, contents=prompt)
+                ai_insights = response.text
+                break
+            except Exception:
+                pass
 
-    # Charts
-    charts = build_chart_data(df)
+        if not ai_insights:
+            ai_insights = generate_local_insights(df)
 
-    # AI insights
-    summary = build_summary_for_ai(df)
-    prompt = (
-        "Eres un analista de datos senior. Basándote en este dataset, entrega:\n\n"
-        "**Resumen ejecutivo** (2-3 oraciones con los hallazgos más importantes)\n\n"
-        "**Insights clave:**\n"
-        "- [3-5 puntos accionables y concretos]\n\n"
-        "**Recomendación principal** (qué acción concreta se debería tomar)\n\n"
-        "Responde en español. Sé directo y específico con los números del dataset.\n\n"
-        f"{summary}"
-    )
+        return {
+            "filename":   file.filename,
+            "rows":       len(df),
+            "cols":       len(df.columns),
+            "preview":    preview,
+            "columns":    columns,
+            "stats":      stats,
+            "charts":     charts,
+            "ai_insights": ai_insights,
+        }
 
-    for model_name in ["gemini-2.0-flash-lite", "gemini-1.5-flash", "gemini-2.0-flash"]:
-        try:
-            response = client.models.generate_content(model=model_name, contents=prompt)
-            ai_insights = response.text
-            break
-        except Exception:
-            ai_insights = None
-
-    if not ai_insights:
-        ai_insights = generate_local_insights(df)
-
-    return {
-        "filename": file.filename,
-        "rows": len(df),
-        "cols": len(df.columns),
-        "preview": preview,
-        "columns": columns,
-        "stats": stats,
-        "charts": charts,
-        "ai_insights": ai_insights,
-    }
+    except HTTPException:
+        raise  # re-lanzar errores HTTP ya formateados
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error procesando el archivo: {str(e)}")
 
 
 @app.get("/health")
