@@ -240,16 +240,39 @@ def generate_local_insights(df: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
+def read_file(filename: str, content: bytes) -> pd.DataFrame:
+    """Lee CSV o Excel probando múltiples encodings automáticamente."""
+    name = filename.lower()
+
+    # ── Excel ────────────────────────────────────────────────────────────────
+    if name.endswith((".xlsx", ".xls")):
+        return pd.read_excel(io.BytesIO(content))
+
+    # ── CSV: probar encodings en orden de probabilidad ────────────────────────
+    ENCODINGS = ["utf-8", "utf-8-sig", "latin-1", "cp1252", "utf-16", "iso-8859-1"]
+    last_err: Exception | None = None
+    for enc in ENCODINGS:
+        try:
+            return pd.read_csv(io.BytesIO(content), sep=None, engine="python", encoding=enc)
+        except Exception as e:
+            last_err = e
+    raise last_err  # type: ignore
+
+
 @app.post("/analyze")
 async def analyze(file: UploadFile = File(...)):
-    if not file.filename.lower().endswith(".csv"):
-        raise HTTPException(status_code=400, detail="Solo se aceptan archivos CSV")
+    ALLOWED = (".csv", ".xlsx", ".xls")
+    if not any(file.filename.lower().endswith(ext) for ext in ALLOWED):
+        raise HTTPException(status_code=400, detail="Solo se aceptan archivos CSV o Excel (.xlsx)")
 
     content = await file.read()
     try:
-        df = pd.read_csv(io.BytesIO(content), sep=None, engine="python")
+        df = read_file(file.filename, content)
     except Exception:
-        raise HTTPException(status_code=400, detail="No se pudo leer el CSV")
+        raise HTTPException(
+            status_code=400,
+            detail="No se pudo leer el archivo. Verifica que sea un CSV o Excel válido."
+        )
 
     if df.empty:
         raise HTTPException(status_code=400, detail="El CSV está vacío")

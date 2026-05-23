@@ -2,6 +2,7 @@ fastapi
 uvicorn[standard]
 pandas
 numpy
+openpyxl
 google-genai
 python-multipart
 python-dotenv
