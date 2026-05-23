@@ -278,6 +278,37 @@ def read_file(filename: str, content: bytes) -> pd.DataFrame:
     raise last_err or ValueError("No se pudo parsear el archivo")
 
 
+def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    """Limpia artefactos comunes: columnas/valores con ; sobrante, espacios, etc."""
+    # Limpiar nombres de columnas (strip espacios y ; sobrantes)
+    df.columns = [str(c).strip().rstrip(";").strip() for c in df.columns]
+
+    # Eliminar columnas sin nombre útil (Unnamed: 0, Unnamed: 1, ...)
+    # .copy() evita SettingWithCopyWarning al asignar columnas después
+    df = df.loc[:, ~df.columns.str.match(r"^Unnamed")].copy()
+
+    for col in df.columns:
+        # Pandas 2.0+ usa StringDtype (dtype=str), NO object — usar is_numeric para el chequeo
+        is_text = not pd.api.types.is_numeric_dtype(df[col]) and not pd.api.types.is_datetime64_any_dtype(df[col])
+        if is_text:
+            # Quitar ; " y espacios sobrantes al final/inicio con regex
+            cleaned = (
+                df[col]
+                .astype(str)
+                .str.replace(r'[";;\s]+$', "", regex=True)  # trailing artefacts
+                .str.replace(r'^["\s]+', "", regex=True)     # leading artefacts
+                .str.strip()
+            )
+            # Intentar convertir a numérico si >= 80% de valores son válidos
+            numeric = pd.to_numeric(cleaned, errors="coerce")
+            if numeric.notna().mean() >= 0.8:
+                df[col] = numeric
+            else:
+                df[col] = cleaned.replace("nan", pd.NA)
+
+    return df
+
+
 @app.post("/analyze")
 async def analyze(file: UploadFile = File(...)):
     ALLOWED = (".csv", ".xlsx", ".xls")
@@ -287,6 +318,7 @@ async def analyze(file: UploadFile = File(...)):
     content = await file.read()
     try:
         df = read_file(file.filename, content)
+        df = clean_dataframe(df)
     except Exception:
         raise HTTPException(
             status_code=400,
