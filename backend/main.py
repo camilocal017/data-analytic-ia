@@ -10,7 +10,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY"),
+    http_options={"timeout": 10},   # 10 segundos máx por request a Gemini
+)
 
 app = FastAPI()
 
@@ -374,13 +377,18 @@ async def analyze(file: UploadFile = File(...)):
         )
 
         ai_insights = None
-        for model_name in ["gemini-2.0-flash-lite", "gemini-1.5-flash", "gemini-2.0-flash"]:
+        for model_name in ["gemini-2.0-flash-lite", "gemini-1.5-flash"]:
             try:
-                response = client.models.generate_content(model=model_name, contents=prompt)
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                )
                 ai_insights = response.text
                 break
-            except Exception:
-                pass
+            except Exception as gem_err:
+                # 429 quota agotada → no tiene sentido seguir intentando
+                if "429" in str(gem_err) or "RESOURCE_EXHAUSTED" in str(gem_err):
+                    break
 
         if not ai_insights:
             ai_insights = generate_local_insights(df)
