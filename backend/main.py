@@ -262,7 +262,7 @@ def read_file(filename: str, content: bytes) -> pd.DataFrame:
         {"quoting": 3, "on_bad_lines": "skip", "escapechar": "\\"},  # QUOTE_NONE + escape
     ]
 
-    last_err = None
+    errors = []
     for enc in ENCODINGS:
         for opts in PARSE_OPTS:
             try:
@@ -276,9 +276,9 @@ def read_file(filename: str, content: bytes) -> pd.DataFrame:
                 if not df.empty:
                     return df
             except Exception as e:
-                last_err = e
+                errors.append(f"{enc}/{list(opts.keys())}: {e}")
 
-    raise last_err or ValueError("No se pudo parsear el archivo")
+    raise ValueError("Intentos fallidos:\n" + "\n".join(errors[-6:]))
 
 
 def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
